@@ -1,0 +1,36 @@
+{
+  "name": "pingan-payment",
+  "version": "0.0.1",
+  "description": "Client for Pingan Payment Service",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/index.js",
+    "build": "babel src --out-dir lib",
+    "start": "node lib/index.js"
+  },
+  "keywords": [
+    "pingan",
+    "payment"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:yyang/node-pingan-payment.git"
+  },
+  "bugs": {
+    "url" : "https://github.com/yyang/node-pingan-payment/issues",
+    "email" : "hello+pingan-payment@iyyang.com"
+  },
+  "author": "Steve Yang <hello@iyyang.com> (http://yyang.me/)",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.9.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.9.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
+    "babel-plugin-transform-es2015-parameters": "^6.9.0",
+    "babel-plugin-transform-es2015-spread": "^6.8.0",
+    "babel-plugin-transform-strict-mode": "^6.8.0",
+    "nodemon": "^1.9.2"
+  }
+}
