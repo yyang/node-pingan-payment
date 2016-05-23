@@ -1,5 +1,6 @@
 let C = String;
 let N = Number;
+let B = Boolean;
 
 let request = {
   6000: {
@@ -42,8 +43,8 @@ let request = {
 let response = {
   6000: {
     keys: [
-      {key: 'CustAcctId', required: true, length: 32},
-      {key: 'Reserve', required: true, length: 20}
+      {key: 'CustAcctId', required: true, type: C, length: 32},
+      {key: 'Reserve', required: true, type: C, length: 20}
     ]
   }
 };
