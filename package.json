@@ -17,8 +17,8 @@
     "url": "git@github.com:yyang/node-pingan-payment.git"
   },
   "bugs": {
-    "url" : "https://github.com/yyang/node-pingan-payment/issues",
-    "email" : "hello+pingan-payment@iyyang.com"
+    "url": "https://github.com/yyang/node-pingan-payment/issues",
+    "email": "hello+pingan-payment@iyyang.com"
   },
   "author": "Steve Yang <hello@iyyang.com> (http://yyang.me/)",
   "license": "UNLICENSED",
@@ -31,6 +31,12 @@
     "babel-plugin-transform-es2015-parameters": "^6.9.0",
     "babel-plugin-transform-es2015-spread": "^6.8.0",
     "babel-plugin-transform-strict-mode": "^6.8.0",
+    "eslint": "^2.10.2",
+    "eslint-config-google": "^0.5.0",
     "nodemon": "^1.9.2"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.4.13",
+    "jackpot": "0.0.6"
   }
 }
