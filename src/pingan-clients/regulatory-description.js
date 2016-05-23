@@ -146,7 +146,7 @@ let request = {
       {key: 'TranAmount', required: true, type: N, length: 15},
       {key: 'Note', required: false, type: C, length: 120},
       {key: 'Reserve', required: false, type: C, length: 120},
-      {key: 'WebSign', required: true, type: C, length: 256}
+      {key: 'WebSign', required: false, type: C, length: 256}
     ]
   },
   6085: {
@@ -159,6 +159,9 @@ let request = {
       {key: 'OutAcctIdName', required: true, type: C, length: 120},
       {key: 'CcyCode', required: true, type: C, length: 3, default: 'RMB'},
       {key: 'TranAmount', required: true, type: N, length: 15},
+      {key: 'HandFee', required: true, type: N, length: 15},
+      {key: 'SerialNo', required: true, type: C, length: 32},
+      {key: 'MessageCode', required: true, type: C, length: 7},
       {key: 'Note', required: false, type: C, length: 120},
       {key: 'Reserve', required: false, type: C, length: 120},
       {key: 'WebSign', required: true, type: C, length: 256}
@@ -348,7 +351,7 @@ let request = {
   },
   6048: {
     keys: [
-      {key: 'FuncFlag', required: true, type: C, length: 1},
+      {key: 'FuncFlag', required: true, type: C, length: 1, default: '1'},
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'BeginDate', required: false, type: C, length: 8},
       {key: 'EndDate', required: false, type: C, length: 8},
@@ -581,8 +584,8 @@ let response = {
       {key: 'TranAmount', required: true, type: N, length: 15},
       {key: 'TranDate', required: true, type: C, length: 8},
       {key: 'TranTime', required: true, type: C, length: 6},
-      {key: 'InCustAcctId', required: true, type: C, length: 32},
-      {key: 'OutCustAcctId', required: true, type: C, length: 32},
+      {key: 'InCustAcctId', required: false, type: C, length: 32},
+      {key: 'OutCustAcctId', required: false, type: C, length: 32},
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
@@ -630,8 +633,8 @@ let response = {
       [
         {key: 'TranFlag', required: true, type: C, length: 1},
         {key: 'TranStatus', required: true, type: C, length: 1, default: '0'},
-        {key: 'TranAmount', required: false, type: N, length: 15},
-        {key: 'TranDate', required: false, type: C, length: 8},
+        {key: 'TranAmount', required: true, type: N, length: 15},
+        {key: 'TranDate', required: true, type: C, length: 8},
         {key: 'TranTime', required: true, type: C, length: 6},
         {key: 'FrontLogNo', required: true, type: C, length: 14},
         {key: 'KeepType', required: true, type: C, length: 1},
@@ -669,7 +672,7 @@ let response = {
     keys: [
       {key: 'LastBalance', required: true, type: N, length: 15},
       {key: 'CurBalance', required: true, type: N, length: 15},
-      {key: 'Reserve', required: false, type: C, length: 20}
+      {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
   6037: {
@@ -678,7 +681,7 @@ let response = {
       {key: 'TotalAmount', required: true, type: N, length: 15},
       {key: 'TotalBalance', required: true, type: N, length: 15},
       {key: 'TotalFreezeAmount', required: true, type: N, length: 15},
-      {key: 'Reserve', required: false, type: C, length: 20}
+      {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
   6079: {
@@ -701,7 +704,7 @@ let response = {
         {key: 'Note', required: true, type: C, length: 500},
         {key: 'Note2', required: true, type: C, length: 500},
       ],
-      {key: 'Reserve', required: false, type: C, length: 20}
+      {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
   6080: {
@@ -729,7 +732,7 @@ let response = {
         {key: 'Note', required: true, type: C, length: 500},
         {key: 'Note2', required: true, type: C, length: 500},
       ],
-      {key: 'Reserve', required: false, type: C, length: 20}
+      {key: 'Reserve', required: false, type: C, length: 120}
     ]
   }
 };
