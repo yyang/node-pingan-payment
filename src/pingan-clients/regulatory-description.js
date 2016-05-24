@@ -4,7 +4,7 @@ let C = String;
 let N = Number;
 let B = Boolean;
 
-let request = {
+const request = {
   6000: {
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1, default: '1'},
@@ -433,7 +433,7 @@ let request = {
   }
 };
 
-let response = {
+const response = {
   6000: {
     keys: [
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -739,4 +739,4 @@ let response = {
   }
 };
 
-export let api = {request, response};
+export const api = {request, response};
