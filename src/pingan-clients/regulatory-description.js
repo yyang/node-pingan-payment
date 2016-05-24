@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^[CNB]$" }] */
+
 let C = String;
 let N = Number;
 let B = Boolean;
@@ -113,7 +115,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6005: {
+  6005: { // 6005文档有WebSign必填 Java源码没有这个字段
     keys: [
       {key: 'TranWebName', required: true, type: C, length: 120},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -149,7 +151,7 @@ let request = {
       {key: 'WebSign', required: false, type: C, length: 256}
     ]
   },
-  6085: {
+  6085: { // 文档存在，Java SDK没有
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -167,7 +169,7 @@ let request = {
       {key: 'WebSign', required: true, type: C, length: 256}
     ]
   },
-  6008: {
+  6008: { // 6005文档有Note必填 Java源码没有这个字段
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -179,7 +181,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6053: {
+  6053: { // 文档存在，Java SDK没有
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'TotalCount', required: true, type: C, length: 8},
@@ -193,7 +195,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6006: {
+  6006: { // 6006文档有WebSign必填 Java源码没有这个字段
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'OutCustAcctId', required: true, type: C, length: 32},
@@ -255,7 +257,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6007: {
+  6007: { // 6007文档有HandFee Java源码写作TranFee
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -270,7 +272,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6070: {
+  6070: { // 文档存在，Java SDK没有
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'OutCustAcctId', required: true, type: C, length: 32},
@@ -282,10 +284,10 @@ let request = {
       [
         {key: 'InCustAcctId', required: true, type: C, length: 32},
         {key: 'InThirdCustId', required: true, type: C, length: 32},
-        {key: 'TranAmount', required: true, type: N, length: 15},
+        {key: 'TranAmount', required: true, type: N, length: 15}
       ],
       {key: 'Note', required: false, type: C, length: 120},
-      {key: 'Reserve', required: false, type: C, length: 120},
+      {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
   6077: {
@@ -296,7 +298,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6082: {
+  6082: { // 文档存在，Java SDK没有
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -309,7 +311,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6083: {
+  6083: { // 文档存在，Java SDK没有
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -320,7 +322,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6084: {
+  6084: { // 文档存在，Java SDK没有
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -405,7 +407,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6079: {
+  6079: { // 文档存在，Java SDK没有
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -417,7 +419,7 @@ let request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  6080: {
+  6080: { // 文档存在，Java SDK没有
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: false, type: C, length: 32},
@@ -597,7 +599,7 @@ let response = {
         {key: 'ThirdLogNo', required: true, type: C, length: 22},
         {key: 'Remark', required: false, type: C, length: 120},
         {key: 'WithDrawRemark', required: false, type: C, length: 600},
-        {key: 'WithDrawDate', required: true, type: C, length: 8},
+        {key: 'WithDrawDate', required: true, type: C, length: 8}
       ],
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
@@ -640,7 +642,7 @@ let response = {
         {key: 'KeepType', required: true, type: C, length: 1},
         {key: 'InCustAcctId', required: false, type: C, length: 32},
         {key: 'OutCustAcctId', required: false, type: C, length: 32},
-        {key: 'Note', required: false, type: C, length: 120},
+        {key: 'Note', required: false, type: C, length: 120}
       ],
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
@@ -663,7 +665,7 @@ let response = {
         {key: 'TranDate', required: true, type: C, length: 8},
         {key: 'TranTime', required: true, type: C, length: 6},
         {key: 'FrontLogNo', required: true, type: C, length: 14},
-        {key: 'Note', required: false, type: C, length: 120},
+        {key: 'Note', required: false, type: C, length: 120}
       ],
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
@@ -702,7 +704,7 @@ let response = {
         {key: 'FrontLogNo', required: true, type: C, length: 14},
         {key: 'ThirdLogNo', required: true, type: C, length: 20},
         {key: 'Note', required: true, type: C, length: 500},
-        {key: 'Note2', required: true, type: C, length: 500},
+        {key: 'Note2', required: true, type: C, length: 500}
       ],
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
@@ -730,7 +732,7 @@ let response = {
         {key: 'InThirdCustId', required: true, type: C, length: 32},
         {key: 'InCustAcctName', required: true, type: C, length: 120},
         {key: 'Note', required: true, type: C, length: 500},
-        {key: 'Note2', required: true, type: C, length: 500},
+        {key: 'Note2', required: true, type: C, length: 500}
       ],
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
