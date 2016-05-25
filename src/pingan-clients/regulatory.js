@@ -77,8 +77,8 @@ class RegulatoryMessage {
    */
   composeMessageBody() {
     /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^self$" }] */
-    var self = this;
-    var extract = (keyObject, dataObject) => {
+    let self = this;
+    let extract = (keyObject, dataObject) => {
       // Throws Error for missing required param;
       if (keyObject.required && !dataObject.hasOwnProperty(keyObject.key)) {
         throw new Error('[PINGAN] Missing key ${keyObject.key} for function ' +
@@ -89,7 +89,7 @@ class RegulatoryMessage {
         return keyObject.default || '';
       }
       // Validate data
-      var value = dataObject[keyObject.key];
+      let value = dataObject[keyObject.key];
       if (keyObject.type === String && !/^\d+$/.test(value)) {
         throw new Error('[PINGAN] Incorrect key ${keyObject.key} format for ' +
                         'function ${self._functionCode}');
@@ -99,8 +99,8 @@ class RegulatoryMessage {
       }
       return value;
     };
-    var keyDictionary = api.request[this._functionCode];
-    var messageBody = '';
+    let keyDictionary = api.request[this._functionCode];
+    let messageBody = '';
 
     for (let key of keyDictionary) {
       if (key instanceof Array) {
@@ -121,7 +121,7 @@ class RegulatoryMessage {
    * @return {String} Message Head
    */
   composeMessageHead() {
-    var messageHead = '';
+    let messageHead = '';
 
     messageHead += this._functionCode;
     messageHead += this._clientConfig.serviceType;
@@ -139,7 +139,7 @@ class RegulatoryMessage {
   }
 
   composeNetworkHead() {
-    var networkHead = '';
+    let networkHead = '';
 
     networkHead += 'A001130101';
     networkHead += this._clientConfig.marketId;
@@ -198,7 +198,21 @@ class RegulatoryMessage {
     return this._networkHead;
   }
 
-  get message() {
+  get buffer() {
+    var networkHeadBuffer = Buffer.from(this.networkHead);
+    var messageHeadBuffer = Buffer.from(this.messageHead);
+
+    const totalLength = networkHeadBuffer.length + messageHeadBuffer.length +
+                        this.messageBodyBuffer.length;
+
+    return Buffer.concat([networkHeadBuffer,
+                          messageHeadBuffer,
+                          this.messageBodyBuffer], totalLength);
+  }
+}
+
+class RegulatoryResponse {
+  constructor(responseBuffer) {
     
   }
 }
@@ -222,7 +236,7 @@ export default class RegulatoryClient {
       serviceType: config.serviceType || '01', // servType
       macAddress: config.macAddress || '                ', // macCode
       dateTimeFormat: config.dateTimeFormat || 'yyyyMMddHHmmss', // tranDateTime
-      defaultResponseCode: config.defaultResponseCode || "999999", //RspCode
+      defaultResponseCode: config.defaultResponseCode || "999999", // RspCode
       conFlag: config.conFlag || "0",
       countId: config.countId || "PA001"
     };
@@ -240,7 +254,7 @@ export default class RegulatoryClient {
       }
 
       // Sends message
-      connection.write(message);
+      connection.write(message.buffer);
       console.log('Connection Initialized');
       connection.on('data', data => {
         callback(null, data.toString());
@@ -257,4 +271,3 @@ export default class RegulatoryClient {
 
 // TODO:
 // Split Message
-// Prepare Message
