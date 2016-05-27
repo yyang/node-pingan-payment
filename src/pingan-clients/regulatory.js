@@ -61,7 +61,7 @@ class RegulatoryMessage {
     // Validates and stores function code
     this._functionCode = functionCode;
     if (!api.request.hasOwnProperty(functionCode)) {
-      throw new Error('[PINGAN] Pingan Invalid Function Code');
+      throw new Error('[JZB] Pingan Invalid Function Code');
     }
 
     // Saves parameter list
@@ -81,7 +81,7 @@ class RegulatoryMessage {
     let extract = (keyObject, dataObject) => {
       // Throws Error for missing required param;
       if (keyObject.required && !dataObject.hasOwnProperty(keyObject.key)) {
-        throw new Error('[PINGAN] Missing key ${keyObject.key} for function ' +
+        throw new Error('[JZB] Missing key ${keyObject.key} for function ' +
                         '${self._functionCode}');
       }
       // Writes default value for non-existing params;
@@ -91,10 +91,10 @@ class RegulatoryMessage {
       // Validate data
       let value = dataObject[keyObject.key];
       if (keyObject.type === String && !/^\d+$/.test(value)) {
-        throw new Error('[PINGAN] Incorrect key ${keyObject.key} format for ' +
+        throw new Error('[JZB] Incorrect key ${keyObject.key} format for ' +
                         'function ${self._functionCode}');
       } else if (value.length > keyObject.length) {
-        throw new Error('[PINGAN] Key ${keyObject.key} overflow for function ' +
+        throw new Error('[JZB] Key ${keyObject.key} overflow for function ' +
                         '${self._functionCode}');
       }
       return value;
@@ -199,8 +199,8 @@ class RegulatoryMessage {
   }
 
   get buffer() {
-    var networkHeadBuffer = Buffer.from(this.networkHead);
-    var messageHeadBuffer = Buffer.from(this.messageHead);
+    let networkHeadBuffer = Buffer.from(this.networkHead);
+    let messageHeadBuffer = Buffer.from(this.messageHead);
 
     const totalLength = networkHeadBuffer.length + messageHeadBuffer.length +
                         this.messageBodyBuffer.length;
@@ -213,14 +213,43 @@ class RegulatoryMessage {
 
 class RegulatoryResponse {
   constructor(responseBuffer) {
-    
+    this._responseBuffer = responseBuffer;
+    this._responseCode = responseBuffer.toString('utf8', 87, 93);
+    this._fullResponseMessage = responseBuffer.toString('utf8', 93, 193);
+    this._responseMessage = this._responseMessage.trim();
+
+    // Escapes if response code other than 000000
+    if (this._responseCode !== '000000') {
+      throw new Error('[JZB] Invalid Response Code ${this._responseCode}');
+    }
+
+    this._functionCode = responseBuffer.toString('utf8', 222, 226);
+
+    // Copies last part of buffer to body buffer;
+    let responseBodyBuffer = Buffer.alloc(this._responseBuffer.length - 344);
+    responseBuffer.copy(responseBodyBuffer, 0, 344);
+    this._responseBody = gbkDecode(responseBodyBuffer);
+
+    this._message = this.parseResponseBody();
+  }
+
+  parseResponseBody() {
+    return {};
+  }
+
+  get success() {
+    return this._responseCode === '000000';
+  }
+
+  get message() {
+    return this._message;
   }
 }
 
 export default class RegulatoryClient {
   constructor(config) {
     if (!('port' in config && 'server' in config && 'marketId' in config)) {
-      throw new Error('[PINGAN] Cannot initialize retulatory client.');
+      throw new Error('[JZB] Cannot initialize retulatory client.');
     }
     // Set up Regulatory Client (见证宝)
     this._pool = new ConnectionPool(10, () => {
@@ -257,7 +286,12 @@ export default class RegulatoryClient {
       connection.write(message.buffer);
       console.log('Connection Initialized');
       connection.on('data', data => {
-        callback(null, data.toString());
+        try {
+          let response = new RegulatoryResponse(data);
+          callback(null, response.message);
+        } catch (error) {
+          callback(error, null);
+        }
         connection.end();
       });
 
@@ -271,3 +305,4 @@ export default class RegulatoryClient {
 
 // TODO:
 // Split Message
+// Buffer API Compatibility

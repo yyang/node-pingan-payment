@@ -1,5 +1,4 @@
-import RegulatoryClient from './pingan-clients';
-import PaymentClient from './pingan-clients';
+import {RegulatoryClient, PaymentClient} from './pingan-clients';
 
 export default class Pingan {
   constructor(config) {
