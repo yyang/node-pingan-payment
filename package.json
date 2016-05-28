@@ -38,6 +38,7 @@
   "dependencies": {
     "dateformat": "^1.0.12",
     "iconv-lite": "^0.4.13",
-    "jackpot": "0.0.6"
+    "jackpot": "0.0.6",
+    "semver": "^5.1.0"
   }
 }
