@@ -99,7 +99,7 @@ class RegulatoryMessage {
       }
       return value;
     };
-    let keyDictionary = api.request[this._functionCode];
+    let keyDictionary = api.request[this._functionCode].keys;
     let messageBody = '';
 
     for (let key of keyDictionary) {
@@ -228,21 +228,56 @@ class RegulatoryResponse {
     // Copies last part of buffer to body buffer;
     let responseBodyBuffer = Buffer.alloc(this._responseBuffer.length - 344);
     responseBuffer.copy(responseBodyBuffer, 0, 344);
-    this._responseBody = gbkDecode(responseBodyBuffer);
+    this._responseBodyString = gbkDecode(responseBodyBuffer);
 
-    this._message = this.parseResponseBody();
+    this._responseBody = this.parseResponseBody();
   }
 
   parseResponseBody() {
-    return {};
+    let responseBody = {};
+    let responseArray = this._responseBodyString.split('&');
+    let keyDictionary = api.response[this._functionCode].keys;
+    let recurItemCount = 0;
+
+    // Put everything into responseBody Object
+    for (let i = 0; i < keyDictionary.length; i++) {
+      let keyObject = keyDictionary[i];
+
+      // Process Recurring items
+      if (keyObject instanceof Array) {
+        // Note: add a redundant item for the sake of fucking stupid
+        // 'reserve' key at the end of response.
+        // Otherwise no need to reassign recurItemCount.
+        recurItemCount = responseArray.length - keyDictionary.length + 2;
+        let recurrence = ~~(recurItemCount / keyObject.length);
+        recurItemCount = keyObject.length * recurrence;
+        // Initialize list;
+        responseBody.list = [];
+        // Prepares item
+        while (recurrence--) {
+          let recurItem = {};
+          let base = i + recurrence * keyObject.length;
+          for (let j = 0; j < keyObject.length; j++) {
+            recurItem[keyObject[j].key] = responseArray[base + j];
+          }
+          responseBody.list.push(recurItem);
+        }
+
+      // Process standard items
+      } else {
+        var index = recurItemCount ? recurItemCount + i - 1 : i;
+        responseBody[keyObject.key] = keyDictionary[index];
+      }
+    }
+    return responseBody;
   }
 
   get success() {
     return this._responseCode === '000000';
   }
 
-  get message() {
-    return this._message;
+  get responseBody() {
+    return this._responseBody;
   }
 }
 
@@ -288,7 +323,7 @@ export default class RegulatoryClient {
       connection.on('data', data => {
         try {
           let response = new RegulatoryResponse(data);
-          callback(null, response.message);
+          callback(null, response.responseBody);
         } catch (error) {
           callback(error, null);
         }
@@ -302,7 +337,3 @@ export default class RegulatoryClient {
     });
   }
 }
-
-// TODO:
-// Split Message
-// Buffer API Compatibility
