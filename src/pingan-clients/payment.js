@@ -1,6 +1,28 @@
+class PaymentMessage {
+  constructor(clientConfig, functionCode, paramsList) {
+
+  }
+
+  composeXML() {
+
+  }
+}
+
+class PaymentResponse {
+  constructor(string) {
+
+  }
+
+  parseXML() {
+
+  }
+
+  
+}
+
 export default class PaymentClient {
   constructor(config) {
-    // Set up Regulatory Client (见证宝)
+    // Set up Regulatory Client (跨行支付收单)
     this._url = config.url;
     this._gatewayCertificate = config.gatewayCertificate;
     this._merchantCertificate = config.merchantCertificate;
@@ -30,15 +52,7 @@ export default class PaymentClient {
     });
   }
 
-  prepareMessage(functionCode, paramsList) {
-
-  }
-
-  signMessage() {
-
-  }
-
-  parseMessage(functionCode, message) {
+  preparePaymentRequest(paramsList) {
 
   }
 }
