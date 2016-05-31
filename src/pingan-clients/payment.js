@@ -17,7 +17,7 @@ class PaymentResponse {
 
   }
 
-  
+
 }
 
 export default class PaymentClient {
@@ -52,7 +52,7 @@ export default class PaymentClient {
     });
   }
 
-  preparePaymentRequest(paramsList) {
+  preparePaymentForm(paramsList) {
 
   }
 }

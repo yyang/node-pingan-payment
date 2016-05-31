@@ -1,3 +1,4 @@
+require('./utils/polyfill');
 import {RegulatoryClient, PaymentClient} from './pingan-clients';
 
 export default class Pingan {
@@ -17,5 +18,22 @@ export default class Pingan {
       // Close the client socket completely
       client.destroy();
     });
+  }
+
+  testRegulatoryClient() {
+    var params = {
+      FuncFlag: '1',
+      SupAcctId: '1101156789',
+      ThirdCustId: 'HW001',
+      CustProperty: '00',
+      NickName: '黄威翔',
+      Reserve: '保留域'
+    };
+    console.log('Sending Message: ' + params);
+    this._regulatoryClient.sendMessage('20160531010101123456', '6000', params,
+      (error, result) => {
+        console.log('Error: ' + error);
+        console.log('Result: ' + result);
+      });
   }
 }
