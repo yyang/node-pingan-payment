@@ -23,8 +23,8 @@ export default class Pingan {
   testRegulatoryClient() {
     var params = {
       FuncFlag: '1',
-      SupAcctId: '1101156789',
-      ThirdCustId: 'HW001',
+      SupAcctId: '11014166568005',
+      ThirdCustId: 'HW0022',
       CustProperty: '00',
       NickName: '黄威翔',
       Reserve: '保留域'
@@ -33,7 +33,7 @@ export default class Pingan {
     this._regulatoryClient.sendMessage('20160531010101123456', '6000', params,
       (error, result) => {
         console.log('Error: ' + error);
-        console.log('Result: ' + result);
+        console.log('Result: ' + JSON.stringify(result));
       });
   }
 }

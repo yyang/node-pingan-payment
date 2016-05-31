@@ -144,7 +144,7 @@ class RegulatoryMessage {
     networkHead += 'A001130101';
     networkHead += this._clientConfig.marketId;
     networkHead += '                '; // Part 2, 16 spaces
-    networkHead += padString(this.messageBodyBuffer.length, 10, '0');
+    networkHead += padString(this.messageBodyBuffer.length+122, 10, '0');
     networkHead += '000000'; // Part 3, hTradeCode
     networkHead += this._clientConfig.countId; // Part 4, 7 digits total
     networkHead += this._clientConfig.serviceType;
@@ -216,11 +216,11 @@ class RegulatoryResponse {
     this._responseBuffer = responseBuffer;
     this._responseCode = responseBuffer.toString('utf8', 87, 93);
     this._fullResponseMessage = responseBuffer.toString('utf8', 93, 193);
-    this._responseMessage = this._responseMessage.trim();
+    this._responseMessage = this._responseMessage;
 
     // Escapes if response code other than 000000
     if (this._responseCode !== '000000') {
-      throw new Error('[JZB] Invalid Response Code' + this._responseCode);
+      throw new Error('[JZB] Invalid Response Code ' + this._responseCode + ' : '+ this._fullResponseMessage);
     }
 
     this._functionCode = responseBuffer.toString('utf8', 222, 226);
