@@ -1,8 +1,8 @@
 import net from 'net';
 import iconv from 'iconv-lite';
-import api from './regulatory-description';
 import dateFormat from 'dateformat';
 import ConnectionPool from 'jackpot';
+import {api} from './regulatory-description';
 
 /**
  * Encodes UTF-8 String to GBK Encoded Buffer
@@ -81,8 +81,8 @@ class RegulatoryMessage {
     let extract = (keyObject, dataObject) => {
       // Throws Error for missing required param;
       if (keyObject.required && !dataObject.hasOwnProperty(keyObject.key)) {
-        throw new Error('[JZB] Missing key ${keyObject.key} for function ' +
-                        '${self._functionCode}');
+        throw new Error('[JZB] Missing key ' + keyObject.key +
+                        ' for function ' + self._functionCode);
       }
       // Writes default value for non-existing params;
       if (!dataObject.hasOwnProperty(keyObject.key)) {
@@ -90,12 +90,12 @@ class RegulatoryMessage {
       }
       // Validate data
       let value = dataObject[keyObject.key];
-      if (keyObject.type === String && !/^\d+$/.test(value)) {
-        throw new Error('[JZB] Incorrect key ${keyObject.key} format for ' +
-                        'function ${self._functionCode}');
+      if (keyObject.type === Number && !/^\d+$/.test(value)) {
+        throw new Error('[JZB] Incorrect key ' + keyObject.key +
+                        ' format for function ' + self._functionCode);
       } else if (value.length > keyObject.length) {
-        throw new Error('[JZB] Key ${keyObject.key} overflow for function ' +
-                        '${self._functionCode}');
+        throw new Error('[JZB] Key ' + keyObject.key +
+                        ' overflow for function ' + self._functionCode);
       }
       return value;
     };
@@ -220,7 +220,7 @@ class RegulatoryResponse {
 
     // Escapes if response code other than 000000
     if (this._responseCode !== '000000') {
-      throw new Error('[JZB] Invalid Response Code ${this._responseCode}');
+      throw new Error('[JZB] Invalid Response Code' + this._responseCode);
     }
 
     this._functionCode = responseBuffer.toString('utf8', 222, 226);
@@ -318,21 +318,25 @@ export default class RegulatoryClient {
       }
 
       // Sends message
-      connection.write(message.buffer);
       console.log('Connection Initialized');
+      connection.write(message.buffer);
+
+      // Response message
+      let buffer = Buffer.alloc(0);
       connection.on('data', data => {
-        try {
-          let response = new RegulatoryResponse(data);
-          callback(null, response.responseBody);
-        } catch (error) {
-          callback(error, null);
-        }
-        connection.end();
+        let totalLength = buffer.length + data.length;
+        buffer = Buffer.concat([buffer, data], totalLength);
       });
 
       // Disconnects message
       connection.on('end', () => {
         console.log('Connection Terminated');
+        try {
+          let response = new RegulatoryResponse(buffer);
+          callback(null, response);
+        } catch (error) {
+          callback(error, null);
+        }
       });
     });
   }
