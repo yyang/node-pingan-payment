@@ -1,7 +1,9 @@
 import Pingan from './pingan';
 
 var pingan = new Pingan({
-  a: 'b'
+  server: '192.168.32.210',
+  port: 7072,
+  marketId: '3006'
 });
 
 console.log(pingan);
