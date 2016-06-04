@@ -6,6 +6,7 @@ let B = Boolean;
 
 const request = {
   6000: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1, default: '1'},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -18,6 +19,7 @@ const request = {
     ]
   },
   6052: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'OutCustAcctId', required: true, type: C, length: 32},
@@ -40,6 +42,7 @@ const request = {
     ]
   },
   6055: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -57,6 +60,7 @@ const request = {
     ]
   },
   6064: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -68,6 +72,7 @@ const request = {
     ]
   },
   6066: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -85,6 +90,7 @@ const request = {
     ]
   },
   6067: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -95,6 +101,7 @@ const request = {
     ]
   },
   6065: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -105,6 +112,7 @@ const request = {
     ]
   },
   6056: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -116,6 +124,7 @@ const request = {
     ]
   },
   6005: { // 6005文档有WebSign必填 Java源码没有这个字段
+    client: 'regulatory',
     keys: [
       {key: 'TranWebName', required: true, type: C, length: 120},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -134,6 +143,7 @@ const request = {
     ]
   },
   6033: {
+    client: 'regulatory',
     keys: [
       {key: 'TranWebName', required: true, type: C, length: 120},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -152,6 +162,7 @@ const request = {
     ]
   },
   6085: { // 文档存在，Java SDK没有
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -170,6 +181,7 @@ const request = {
     ]
   },
   6008: { // 6005文档有Note必填 Java源码没有这个字段
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -182,6 +194,7 @@ const request = {
     ]
   },
   6053: { // 文档存在，Java SDK没有
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'TotalCount', required: true, type: C, length: 8},
@@ -196,6 +209,7 @@ const request = {
     ]
   },
   6006: { // 6006文档有WebSign必填 Java源码没有这个字段
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'OutCustAcctId', required: true, type: C, length: 32},
@@ -217,6 +231,7 @@ const request = {
     ]
   },
   6034: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'OutCustAcctId', required: true, type: C, length: 32},
@@ -238,6 +253,7 @@ const request = {
     ]
   },
   6031: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -258,6 +274,7 @@ const request = {
     ]
   },
   6007: { // 6007文档有HandFee Java源码写作TranFee
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -273,6 +290,7 @@ const request = {
     ]
   },
   6070: { // 文档存在，Java SDK没有
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'OutCustAcctId', required: true, type: C, length: 32},
@@ -291,6 +309,7 @@ const request = {
     ]
   },
   6077: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'FuncFlag', required: true, type: C, length: 1},
@@ -299,6 +318,7 @@ const request = {
     ]
   },
   6082: { // 文档存在，Java SDK没有
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -312,6 +332,7 @@ const request = {
     ]
   },
   6083: { // 文档存在，Java SDK没有
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -323,6 +344,7 @@ const request = {
     ]
   },
   6084: { // 文档存在，Java SDK没有
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -334,6 +356,7 @@ const request = {
     ]
   },
   6010: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: false, type: C, length: 32},
@@ -343,6 +366,7 @@ const request = {
     ]
   },
   6014: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'FuncFlag', required: true, type: C, length: 1},
@@ -352,6 +376,7 @@ const request = {
     ]
   },
   6048: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1, default: '1'},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -361,6 +386,7 @@ const request = {
     ]
   },
   6050: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1, default: '1'},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -371,6 +397,7 @@ const request = {
     ]
   },
   6072: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -383,6 +410,7 @@ const request = {
     ]
   },
   6073: {
+    client: 'regulatory',
     keys: [
       {key: 'FuncFlag', required: true, type: C, length: 1},
       {key: 'SupAcctId', required: true, type: C, length: 32},
@@ -395,12 +423,14 @@ const request = {
     ]
   },
   6011: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
   6037: {
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'ThirdCustId', required: true, type: C, length: 32},
@@ -408,6 +438,7 @@ const request = {
     ]
   },
   6079: { // 文档存在，Java SDK没有
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: true, type: C, length: 32},
@@ -420,6 +451,7 @@ const request = {
     ]
   },
   6080: { // 文档存在，Java SDK没有
+    client: 'regulatory',
     keys: [
       {key: 'SupAcctId', required: true, type: C, length: 32},
       {key: 'CustAcctId', required: false, type: C, length: 32},
@@ -430,51 +462,81 @@ const request = {
       {key: 'RecordMax', required: true, type: C, length: 4},
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
+  },
+  paymentForm: {
+    client: 'regulatory',
+    keys: [
+      {key: 'orderid', required: true, type: C},
+      {key: 'type', required: true, type: C, length: 1,
+       allowedValues: ['S', 'C', 'R', 'V', 'M']},
+      {key: 'P2PCode', required: true, type: C, length: 4},
+      {key: 'P2PType', required: true, type: C, length: 1, default: '2'},
+      {key: 'thirdCustId', required: true, type: C, length: 32},
+      {key: 'custAcctId', required: true, type: C, length: 32},
+      {key: 'name', required: true, type: C},
+      {key: 'idType', required: true, type: C},
+      {key: 'idNo', required: true, type: C},
+      {key: 'accNo', required: false, type: C},
+      {key: 'accName', required: false, type: C},
+      {key: 'mobile', required: true, type: N, length: 11},
+      {key: 'orig', required: false, type: C},
+      {key: 'returnurl', required: false, type: C},
+      {key: 'notifyUrl', required: false, type: C},
+      {key: 'channelType', required: false, type: C}
+    ]
   }
 };
 
 const response = {
   6000: {
+    client: 'regulatory',
     keys: [
       {key: 'CustAcctId', required: true, type: C, length: 32},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6055: {
+    client: 'regulatory',
     keys: [
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6064: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6066: {
+    client: 'regulatory',
     keys: [
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6067: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: false, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6065: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: false, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6056: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6005: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'HandFee', required: true, type: N, length: 15},
@@ -482,6 +544,7 @@ const response = {
     ]
   },
   6033: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'HandFee', required: true, type: N, length: 15},
@@ -489,60 +552,70 @@ const response = {
     ]
   },
   6085: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6008: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6053: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6006: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6034: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6031: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6007: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6070: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6077: {
+    client: 'regulatory',
     keys: [
       {key: 'FrontLogNo', required: true, type: C, length: 14},
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6082: {
+    client: 'regulatory',
     keys: [
       {key: 'RevMobilePhone', required: true, type: C, length: 12},
       {key: 'SerialNo', required: true, type: C, length: 32},
@@ -550,6 +623,7 @@ const response = {
     ]
   },
   6083: {
+    client: 'regulatory',
     keys: [
       {key: 'RevMobilePhone', required: true, type: C, length: 12},
       {key: 'SerialNo', required: true, type: C, length: 32},
@@ -557,11 +631,13 @@ const response = {
     ]
   },
   6084: {
+    client: 'regulatory',
     keys: [
       {key: 'Reserve', required: false, type: C, length: 20}
     ]
   },
   6010: {
+    client: 'regulatory',
     keys: [
       {key: 'TotalCount', required: true, type: C, length: 8},
       {key: 'BeginNum', required: true, type: C, length: 8},
@@ -580,6 +656,7 @@ const response = {
     ]
   },
   6014: {
+    client: 'regulatory',
     keys: [
       {key: 'TranFlag', required: true, type: C, length: 1},
       {key: 'TranStatus', required: true, type: C, length: 1},
@@ -592,6 +669,7 @@ const response = {
     ]
   },
   6048: {
+    client: 'regulatory',
     keys: [
       {key: 'TotalCount', required: true, type: C, length: 8},
       [
@@ -605,6 +683,7 @@ const response = {
     ]
   },
   6050: {
+    client: 'regulatory',
     keys: [
       {key: 'TotalCount', required: true, type: C, length: 8},
       {key: 'BeginNum', required: true, type: C, length: 8},
@@ -627,6 +706,7 @@ const response = {
     ]
   },
   6072: {
+    client: 'regulatory',
     keys: [
       {key: 'TotalCount', required: true, type: C, length: 8},
       {key: 'BeginNum', required: true, type: C, length: 8},
@@ -648,6 +728,7 @@ const response = {
     ]
   },
   6073: {
+    client: 'regulatory',
     keys: [
       {key: 'TotalCount', required: true, type: C, length: 8},
       {key: 'BeginNum', required: true, type: C, length: 8},
@@ -671,6 +752,7 @@ const response = {
     ]
   },
   6011: {
+    client: 'regulatory',
     keys: [
       {key: 'LastBalance', required: true, type: N, length: 15},
       {key: 'CurBalance', required: true, type: N, length: 15},
@@ -678,6 +760,7 @@ const response = {
     ]
   },
   6037: {
+    client: 'regulatory',
     keys: [
       {key: 'CustAcctId', required: true, type: C, length: 32},
       {key: 'TotalAmount', required: true, type: N, length: 15},
@@ -687,6 +770,7 @@ const response = {
     ]
   },
   6079: {
+    client: 'regulatory',
     keys: [
       {key: 'TotalCount', required: true, type: C, length: 8},
       {key: 'BeginNum', required: true, type: C, length: 8},
@@ -710,6 +794,7 @@ const response = {
     ]
   },
   6080: {
+    client: 'regulatory',
     keys: [
       {key: 'TotalCount', required: true, type: C, length: 8},
       {key: 'BeginNum', required: true, type: C, length: 8},

@@ -2,7 +2,7 @@ import net from 'net';
 import iconv from 'iconv-lite';
 import dateFormat from 'dateformat';
 import ConnectionPool from 'jackpot';
-import {api} from './regulatory-description';
+import {api} from './api-description';
 
 /**
  * Encodes UTF-8 String to GBK Encoded Buffer
@@ -42,15 +42,36 @@ function padString(string, width, spacer) {
   return Array(width + 1 - string.length).join(spacer) + string;
 }
 
+/**
+ * Join all url segments as arguemnts
+ * @return {String} joined url
+ */
+function joinUrl() {
+  let final = '';
+  for (let i = 0; i < arguments.length; i++) {
+    let segment = arguments[i];
+    if (i !== 0) {
+      segment = segment.replace(/^(?!\/)/, '/');
+    }
+    if (i !== arguments.length) {
+      segment = segment.replace(/\/$/, '');
+    }
+    final += segment;
+  }
+  return final;
+}
+
 class RegulatoryMessage {
   /**
    * Class Constructor
-   * @param {String} clientConfig 客户端配置
-   * @param {String} clientLogId  第三方系统流水ID
-   * @param {String} functionCode (4 digit string) according to Pingan Bank.
-   * @param {Object} paramsList   Keys and values.
+   * @param {String} clientConfig    客户端配置
+   * @param {String} clientLogId     第三方系统流水ID
+   * @param {String} functionCode    (4 digit string) according to Pingan Bank.
+   * @param {Object} paramsList      Keys and values.
+   * @param {Boolean} ignoreWebSign  是忽略websign
    */
-  constructor(clientConfig, clientLogId, functionCode, paramsList) {
+  constructor(clientConfig, clientLogId, functionCode, paramsList,
+    ignoreWebSign) {
     // Links client configuration file.
     this._clientConfig = clientConfig;
 
@@ -63,6 +84,8 @@ class RegulatoryMessage {
     if (!api.request.hasOwnProperty(functionCode)) {
       throw new Error('[JZB] Pingan Invalid Function Code');
     }
+
+    this._ignoreWebSign = ignoreWebSign || false;
 
     // Saves parameter list
     this._paramsList = paramsList;
@@ -80,7 +103,8 @@ class RegulatoryMessage {
     let self = this;
     let extract = (keyObject, dataObject) => {
       // Throws Error for missing required param;
-      if (keyObject.required && !dataObject.hasOwnProperty(keyObject.key)) {
+      if (keyObject.required && !dataObject.hasOwnProperty(keyObject.key) &&
+          !keyObject.hasOwnProperty('default')) {
         throw new Error('[JZB] Missing key ' + keyObject.key +
                         ' for function ' + self._functionCode);
       }
@@ -93,9 +117,15 @@ class RegulatoryMessage {
       if (keyObject.type === Number && !/^\d+$/.test(value)) {
         throw new Error('[JZB] Incorrect key ' + keyObject.key +
                         ' format for function ' + self._functionCode);
-      } else if (value.length > keyObject.length) {
+      }
+      if (value.toString().length > keyObject.length) {
         throw new Error('[JZB] Key ' + keyObject.key +
                         ' overflow for function ' + self._functionCode);
+      }
+      if (keyObject.allowedValues &&
+          keyObject.allowedValues.indexOf(value) === -1) {
+        throw new Error('[JZB] Key ' + keyObject.key +
+                        ' has invalid value for ' + self._functionCode);
       }
       return value;
     };
@@ -109,6 +139,8 @@ class RegulatoryMessage {
             messageBody += extract(subKey, listItem) + '&';
           }
         }
+      } else if (this._ignoreWebSign && key.key === 'webSign') {
+        continue;
       } else {
         messageBody += extract(key, this._paramsList) + '&';
       }
@@ -268,7 +300,7 @@ class RegulatoryResponse {
 
       // Process standard items
       } else {
-        var index = recurItemCount ? recurItemCount + i - 1 : i;
+        let index = recurItemCount ? recurItemCount + i - 1 : i;
         responseBody[keyObject.key] = responseArray[index];
       }
     }
@@ -286,7 +318,8 @@ class RegulatoryResponse {
 
 export default class RegulatoryClient {
   constructor(config) {
-    if (!('port' in config && 'server' in config && 'marketId' in config)) {
+    if (!('port' in config && 'server' in config && 'marketId' in config &&
+          'webServiceHost' in config)) {
       throw new Error('[JZB] Cannot initialize retulatory client.');
     }
     // Set up Regulatory Client (见证宝)
@@ -299,6 +332,10 @@ export default class RegulatoryClient {
     });
 
     this._clientConfig = {
+      webServiceHost: config.webServiceHost, // 'https://ebank.sdb.com.cn/'
+      webPath: config.webPath || '/corporbank/nonpartyVerify.do',
+      formReturnUrl: config.formReturnUrl || '',
+      fornNotifyUrl: config.formNotifyUrl || '',
       marketId: config.marketId, // qydm
       serviceType: config.serviceType || '01', // servType
       macAddress: config.macAddress || '                ', // macCode
@@ -307,11 +344,13 @@ export default class RegulatoryClient {
       conFlag: config.conFlag || "0",
       countId: config.countId || "PA001"
     };
+    this._clientConfig.webEndpoint = joinUrl(this._clientConfig.webServiceHost,
+                                             this._clientConfig.webPath);
   }
 
   sendMessage(clientLogId, functionCode, paramsList, callback) {
-    var message = new RegulatoryMessage(this._clientConfig, clientLogId,
-                                        functionCode, paramsList);
+    let message = new RegulatoryMessage(this._clientConfig, clientLogId,
+                                        functionCode, paramsList, false);
 
     this._pool.pull((err, connection) => {
       // Handles Error
@@ -342,5 +381,72 @@ export default class RegulatoryClient {
         }
       });
     });
+  }
+
+  preparePasswordForm(clientLogId, functionCode, paramsList, formParamsList) {
+    let form = '<form name="payment-form' + clientLogId + '" ' +
+               'action=' + this._clientConfig.webEndpoint + '" method="post">';
+
+    // Put together keys
+    for (let keyObject of api.paymentForm.keys) {
+      let value;
+      if (keyObject.key === 'orderid') {
+        value = clientLogId;
+      } else if (keyObject.key === 'P2PCode') {
+        value = this._clientConfig.marketId;
+      } else if (keyObject.key === 'orig') {
+        if (formParamsList.type === 'V') {
+          let message = new RegulatoryMessage(this._clientConfig, clientLogId,
+                                              functionCode, paramsList, true);
+          value = message.messageBody;
+        } else {
+          continue;
+        }
+      } else if (keyObject.key === 'returnurl') {
+        value = this._clientConfig.formReturnUrl;
+      } else if (keyObject.key === 'notifyUrl') {
+        value = this._clientConfig.formNotifyUrl;
+      } else {
+        // Throws Error for missing required param;
+        if (keyObject.required &&
+            !formParamsList.hasOwnProperty(keyObject.key) &&
+            !keyObject.hasOwnProperty('default')) {
+          throw new Error('[JZB] Missing key ' + keyObject.key +
+                          ' for payment form for ' + functionCode);
+        }
+        // Writes default value for non-existing default;
+        if (keyObject.hasOwnProperty('default') &&
+            !formParamsList.hasOwnProperty(keyObject.key)) {
+          value = keyObject.default;
+        } else if (formParamsList.hasOwnProperty(keyObject.key)) {
+          value = formParamsList[keyObject.key];
+        } else {
+          continue;
+        }
+      }
+
+      // Validation
+      if (keyObject.type === Number && !/^\d+$/.test(value)) {
+        throw new Error('[JZB] Incorrect key ' + keyObject.key +
+                        ' format for payment form ' + functionCode);
+      }
+      if (value.toString.length > keyObject.length) {
+        throw new Error('[JZB] Key ' + keyObject.key +
+                        ' overflow for function ' + functionCode);
+      }
+      if (keyObject.allowedValues &&
+          keyObject.allowedValues.indexOf(value) === -1) {
+        throw new Error('[JZB] Key ' + keyObject.key +
+                        ' has invalid value for function ' + functionCode);
+      }
+
+      // Put forms together
+      form += '<input type="hidden" name="' + keyObject.key +
+              '" value="' + value + '" />';
+    }
+
+    form += '</form>';
+
+    return form;
   }
 }

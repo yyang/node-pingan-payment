@@ -8,14 +8,14 @@ export default class Pingan {
     this._paymentClient = new PaymentClient(config);
   }
 
-  sendMessage(functionCode, paramsList, callback) {
-    var client = this._regulatoryClient;
-    client.write();
-    client.on('data', function(data) {
-      console.log('DATA: ' + data);
-      callback(data);
-      // Close the client socket completely
-      client.destroy();
-    });
-  }
+  // sendMessage(functionCode, paramsList, callback) {
+  //   var client = this._regulatoryClient;
+  //   client.write();
+  //   client.on('data', function(data) {
+  //     console.log('DATA: ' + data);
+  //     callback(data);
+  //     // Close the client socket completely
+  //     client.destroy();
+  //   });
+  // }
 }
