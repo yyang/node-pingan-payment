@@ -1,4 +1,5 @@
 import {RegulatoryClient, PaymentClient} from './pingan-clients';
+import {api} from './pingan-clients/api-description';
 
 export default class Pingan {
   constructor(config) {
@@ -8,14 +9,11 @@ export default class Pingan {
     this._paymentClient = new PaymentClient(config);
   }
 
-  // sendMessage(functionCode, paramsList, callback) {
-  //   var client = this._regulatoryClient;
-  //   client.write();
-  //   client.on('data', function(data) {
-  //     console.log('DATA: ' + data);
-  //     callback(data);
-  //     // Close the client socket completely
-  //     client.destroy();
-  //   });
-  // }
+  sendMessage(clientLogId, functionCode, parameters, callback) {
+    if (api[functionCode].client === 'regulatory') {
+      this._regulatoryClient.sendMessage(clientLogId, functionCode, parameters,
+        callback);
+    }
+  }
+
 }
