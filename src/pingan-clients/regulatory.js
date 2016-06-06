@@ -339,7 +339,7 @@ export default class RegulatoryClient {
       marketId: config.marketId, // qydm
       serviceType: config.serviceType || '01', // servType
       macAddress: config.macAddress || '                ', // macCode
-      dateTimeFormat: config.dateTimeFormat || 'yyyyMMddHHmmss', // tranDateTime
+      dateTimeFormat: config.dateTimeFormat || 'yyyymmddHHMMss', // tranDateTime
       defaultResponseCode: config.defaultResponseCode || "999999", // RspCode
       conFlag: config.conFlag || "0",
       countId: config.countId || "PA001"
