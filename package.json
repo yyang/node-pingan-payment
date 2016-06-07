@@ -1,6 +1,6 @@
 {
   "name": "pingan-payment",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Client for Pingan Payment Service",
   "main": "./lib/pingan.js",
   "scripts": {
