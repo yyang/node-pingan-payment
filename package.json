@@ -1,12 +1,13 @@
 {
   "name": "pingan-payment",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "Client for Pingan Payment Service",
-  "main": "lib/index.js",
+  "main": "./lib/pingan.js",
   "scripts": {
     "dev": "nodemon --exec babel-node src/dev-test.js",
     "build": "babel src --out-dir lib",
-    "start": "node lib/dev-test.js"
+    "start": "node lib/dev-test.js",
+    "prepublish": "babel src --out-dir lib"
   },
   "keywords": [
     "pingan",
