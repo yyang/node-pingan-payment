@@ -10,7 +10,7 @@ export default class Pingan {
   }
 
   sendMessage(clientLogId, functionCode, parameters, callback) {
-    if (api[functionCode].client === 'regulatory') {
+    if (api.request[functionCode].client === 'regulatory') {
       this._regulatoryClient.sendMessage(clientLogId, functionCode, parameters,
         callback);
     }
