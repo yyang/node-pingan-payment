@@ -4,6 +4,27 @@ import dateFormat from 'dateformat';
 import ConnectionPool from 'jackpot';
 import {api} from './api-description';
 
+// Using Symbol definition for private variables;
+// Client
+let _clientConfig = Symbol();
+let _pool = Symbol();
+// Send message
+let _clientLogId = Symbol();
+let _functionCode = Symbol();
+let _ignoreWebSign = Symbol();
+let _paramsList = Symbol();
+let _messageBodyBuffer = Symbol();
+let _messageBody = Symbol();
+let _messageHead = Symbol();
+let _networkHead = Symbol();
+// Receive Message
+let _responseBuffer = Symbol();
+let _responseCode = Symbol();
+let _fullResponseMessage = Symbol();
+let _responseMessage = Symbol();
+let _responseBody = Symbol();
+let _responseBodyString = Symbol();
+
 /**
  * Encodes UTF-8 String to GBK Encoded Buffer
  * @param  {String} string UTF-8 String
@@ -73,25 +94,25 @@ class RegulatoryMessage {
   constructor(clientConfig, clientLogId, functionCode, paramsList,
     ignoreWebSign) {
     // Links client configuration file.
-    this._clientConfig = clientConfig;
+    this[_clientConfig] = clientConfig;
 
     // Validates and stores client side ID;
     // Use last 20 digits or fill up string with '0'
-    this._clientLogId = padString(clientLogId, 20, '0');
+    this[_clientLogId] = padString(clientLogId, 20, '0');
 
     // Validates and stores function code
-    this._functionCode = functionCode;
+    this[_functionCode] = functionCode;
     if (!api.request.hasOwnProperty(functionCode)) {
       throw new Error('[JZB] Pingan Invalid Function Code');
     }
 
-    this._ignoreWebSign = ignoreWebSign || false;
+    this[_ignoreWebSign] = ignoreWebSign || false;
 
     // Saves parameter list
-    this._paramsList = paramsList;
-    this._messageBody = this.composeMessageBody();
-    this._messageHead = this.composeMessageHead();
-    this._networkHead = this.composeNetworkHead();
+    this[_paramsList] = paramsList;
+    this[_messageBody] = this.composeMessageBody();
+    this[_messageHead] = this.composeMessageHead();
+    this[_networkHead] = this.composeNetworkHead();
   }
 
   /**
@@ -129,20 +150,20 @@ class RegulatoryMessage {
       }
       return value;
     };
-    let keyDictionary = api.request[this._functionCode].keys;
+    let keyDictionary = api.request[this[_functionCode]].keys;
     let messageBody = '';
 
     for (let key of keyDictionary) {
       if (key instanceof Array) {
-        for (let listItem of this._paramsList.list) {
+        for (let listItem of this[_paramsList].list) {
           for (let subKey of key) {
             messageBody += extract(subKey, listItem) + '&';
           }
         }
-      } else if (this._ignoreWebSign && key.key === 'webSign') {
+      } else if (this[_ignoreWebSign] && key.key === 'webSign') {
         continue;
       } else {
-        messageBody += extract(key, this._paramsList) + '&';
+        messageBody += extract(key, this[_paramsList]) + '&';
       }
     }
     return messageBody;
@@ -155,17 +176,17 @@ class RegulatoryMessage {
   composeMessageHead() {
     let messageHead = '';
 
-    messageHead += this._functionCode;
-    messageHead += this._clientConfig.serviceType;
-    messageHead += this._clientConfig.macAddress;
-    messageHead += dateFormat(new Date(), this._clientConfig.dateTimeFormat);
-    messageHead += this._clientConfig.defaultResponseCode;
+    messageHead += this[_functionCode];
+    messageHead += this[_clientConfig].serviceType;
+    messageHead += this[_clientConfig].macAddress;
+    messageHead += dateFormat(new Date(), this[_clientConfig].dateTimeFormat);
+    messageHead += this[_clientConfig].defaultResponseCode;
     messageHead += Array(43).join(' '); // responseMessage, rspMsg
-    messageHead += this._clientConfig.conFlag;
+    messageHead += this[_clientConfig].conFlag;
     messageHead += padString(this.messageBodyBuffer.length, 8, '0');
-    messageHead += this._clientConfig.countId;
-    messageHead += this._clientLogId;
-    messageHead += this._clientConfig.marketId;
+    messageHead += this[_clientConfig].countId;
+    messageHead += this[_clientLogId];
+    messageHead += this[_clientConfig].marketId;
 
     return messageHead;
   }
@@ -176,17 +197,17 @@ class RegulatoryMessage {
                         Buffer.from(this.messageHead).length;
 
     networkHead += 'A001130101';
-    networkHead += this._clientConfig.marketId;
+    networkHead += this[_clientConfig].marketId;
     networkHead += '                '; // Part 2, 16 spaces
     networkHead += padString(messageLength, 10, '0');
     networkHead += '000000'; // Part 3, hTradeCode
-    networkHead += this._clientConfig.countId; // Part 4, 7 digits total
-    networkHead += this._clientConfig.serviceType;
-    networkHead += dateFormat(new Date(), this._clientConfig.dateTimeFormat);
-    networkHead += this._clientLogId;
-    networkHead += this._clientConfig.defaultResponseCode; // Part 5, RspCode
+    networkHead += this[_clientConfig].countId; // Part 4, 7 digits total
+    networkHead += this[_clientConfig].serviceType;
+    networkHead += dateFormat(new Date(), this[_clientConfig].dateTimeFormat);
+    networkHead += this[_clientLogId];
+    networkHead += this[_clientConfig].defaultResponseCode; // Part 5, RspCode
     networkHead += Array(101).join(' '); // Part 6, RspMsg, 100 spaces
-    networkHead += this._clientConfig.conFlag; // Part 7, 1 char
+    networkHead += this[_clientConfig].conFlag; // Part 7, 1 char
     networkHead += '000'; // Part 7, hTimes, 3 char
     networkHead += '0'; // Part 7, hSignFlag, 1 char
     networkHead += '0'; // Part 7, hSignPacketType, 1 char
@@ -197,39 +218,39 @@ class RegulatoryMessage {
   }
 
   get functionCode() {
-    return this._functionCode;
+    return this[_functionCode];
   }
 
   get paramsList() {
-    return this._paramsList;
+    return this[_paramsList];
   }
 
   get messageBody() {
-    if (!this._messageBody) {
-      this._messageBody = this.composeMessageBody();
+    if (!this[_messageBody]) {
+      this[_messageBody] = this.composeMessageBody();
     }
-    return this._messageBody;
+    return this[_messageBody];
   }
 
   get messageBodyBuffer() {
-    if (!this._messageBodyBuffer) {
-      this._messageBodyBuffer = gbkEncode(this.messageBody);
+    if (!this[_messageBodyBuffer]) {
+      this[_messageBodyBuffer] = gbkEncode(this.messageBody);
     }
-    return this._messageBodyBuffer;
+    return this[_messageBodyBuffer];
   }
 
   get messageHead() {
-    if (this._messageHead) {
-      this._messageHead = this.composeMessageHead();
+    if (this[_messageHead]) {
+      this[_messageHead] = this.composeMessageHead();
     }
-    return this._messageHead;
+    return this[_messageHead];
   }
 
   get networkHead() {
-    if (this._networkHead) {
-      this._networkHead = this.composeNetworkHead();
+    if (this[_networkHead]) {
+      this[_networkHead] = this.composeNetworkHead();
     }
-    return this._networkHead;
+    return this[_networkHead];
   }
 
   get buffer() {
@@ -247,31 +268,31 @@ class RegulatoryMessage {
 
 class RegulatoryResponse {
   constructor(responseBuffer) {
-    this._responseBuffer = responseBuffer;
-    this._responseCode = responseBuffer.toString('utf8', 87, 93);
-    this._fullResponseMessage = gbkDecode(responseBuffer.slice(93, 193));
-    this._responseMessage = this._fullResponseMessage.trim();
+    this[_responseBuffer] = responseBuffer;
+    this[_responseCode] = responseBuffer.toString('utf8', 87, 93);
+    this[_fullResponseMessage] = gbkDecode(responseBuffer.slice(93, 193));
+    this[_responseMessage] = this[_fullResponseMessage].trim();
 
     // Escapes if response code other than 000000
-    if (this._responseCode !== '000000') {
-      throw new Error('[JZB] Invalid Response Code [' + this._responseCode +
-                      ']: ' + this._responseMessage);
+    if (this[_responseCode] !== '000000') {
+      throw new Error('[JZB] Invalid Response Code [' + this[_responseCode] +
+                      ']: ' + this[_responseMessage]);
     }
 
-    this._functionCode = responseBuffer.toString('utf8', 222, 226);
+    this[_functionCode] = responseBuffer.toString('utf8', 222, 226);
 
     // Copies last part of buffer to body buffer;
-    let responseBodyBuffer = Buffer.alloc(this._responseBuffer.length - 344);
+    let responseBodyBuffer = Buffer.alloc(this[_responseBuffer].length - 344);
     responseBuffer.copy(responseBodyBuffer, 0, 344);
-    this._responseBodyString = gbkDecode(responseBodyBuffer);
+    this[_responseBodyString] = gbkDecode(responseBodyBuffer);
 
-    this._responseBody = this.parseResponseBody();
+    this[_responseBody] = this.parseResponseBody();
   }
 
   parseResponseBody() {
     let responseBody = {};
-    let responseArray = this._responseBodyString.split('&');
-    let keyDictionary = api.response[this._functionCode].keys;
+    let responseArray = this[_responseBodyString].split('&');
+    let keyDictionary = api.response[this[_functionCode]].keys;
     let recurItemCount = 0;
 
     // Put everything into responseBody Object
@@ -308,11 +329,11 @@ class RegulatoryResponse {
   }
 
   get success() {
-    return this._responseCode === '000000';
+    return this[_responseCode] === '000000';
   }
 
   get responseBody() {
-    return this._responseBody;
+    return this[_responseBody];
   }
 }
 
@@ -323,7 +344,7 @@ export default class RegulatoryClient {
       throw new Error('[JZB] Cannot initialize retulatory client.');
     }
     // Set up Regulatory Client (见证宝)
-    this._pool = new ConnectionPool(10, () => {
+    this[_pool] = new ConnectionPool(10, () => {
       return net.connect(config.port, config.server);
     }, {
       min: 100,
@@ -331,7 +352,8 @@ export default class RegulatoryClient {
       retries: 3
     });
 
-    this._clientConfig = {
+    this[_clientConfig] = {
+      superviseAccountId: config.superviseAccountId, // 监管账号
       webServiceHost: config.webServiceHost, // 'https://ebank.sdb.com.cn/'
       webPath: config.webPath || '/corporbank/nonpartyVerify.do',
       formReturnUrl: config.formReturnUrl || '',
@@ -344,15 +366,16 @@ export default class RegulatoryClient {
       conFlag: config.conFlag || "0",
       countId: config.countId || "PA001"
     };
-    this._clientConfig.webEndpoint = joinUrl(this._clientConfig.webServiceHost,
-                                             this._clientConfig.webPath);
+    this[_clientConfig].webEndpoint =
+      joinUrl(this[_clientConfig].webServiceHost, this[_clientConfig].webPath);
   }
 
   sendMessage(clientLogId, functionCode, paramsList, callback) {
-    let message = new RegulatoryMessage(this._clientConfig, clientLogId,
+    paramsList.SupAcctId = this[_clientConfig].superviseAccountId;
+    let message = new RegulatoryMessage(this[_clientConfig], clientLogId,
                                         functionCode, paramsList, false);
 
-    this._pool.pull((err, connection) => {
+    this[_pool].pull((err, connection) => {
       // Handles Error
       if (err) {
         callback(err, null);
@@ -385,7 +408,7 @@ export default class RegulatoryClient {
 
   preparePasswordForm(clientLogId, functionCode, paramsList, formParamsList) {
     let form = '<form name="payment-form' + clientLogId + '" ' +
-               'action=' + this._clientConfig.webEndpoint + '" method="post">';
+               'action=' + this[_clientConfig].webEndpoint + '" method="post">';
 
     // Put together keys
     for (let keyObject of api.paymentForm.keys) {
@@ -393,19 +416,19 @@ export default class RegulatoryClient {
       if (keyObject.key === 'orderid') {
         value = clientLogId;
       } else if (keyObject.key === 'P2PCode') {
-        value = this._clientConfig.marketId;
+        value = this[_clientConfig].marketId;
       } else if (keyObject.key === 'orig') {
         if (formParamsList.type === 'V') {
-          let message = new RegulatoryMessage(this._clientConfig, clientLogId,
+          let message = new RegulatoryMessage(this[_clientConfig], clientLogId,
                                               functionCode, paramsList, true);
           value = message.messageBody;
         } else {
           continue;
         }
       } else if (keyObject.key === 'returnurl') {
-        value = this._clientConfig.formReturnUrl;
+        value = this[_clientConfig].formReturnUrl;
       } else if (keyObject.key === 'notifyUrl') {
-        value = this._clientConfig.formNotifyUrl;
+        value = this[_clientConfig].formNotifyUrl;
       } else {
         // Throws Error for missing required param;
         if (keyObject.required &&
