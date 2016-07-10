@@ -1,3 +1,4 @@
+import express from 'express';
 import Pingan from './pingan';
 
 let pingan = new Pingan({
@@ -9,10 +10,30 @@ let pingan = new Pingan({
     superviseAccountId: '11014892692004'
   },
   payment: {
-    pfx: '../certs/2000311146.pfx',
+    pem: '../certs/2000311146.pem',
+    passphrase: '111111',
     cert: '../certs/paygate.cer',
-    masterId: '2000311146'
+    masterId: '2000311146',
+    returnURL: 'http://pingan.stackup.guru/peyment/return',
+    notifyURL: 'http://pingan.stackup.guru/peyment/notify'
   }
 });
 
-console.log(pingan);
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send(pingan.preparePaymentForm({
+    masterId: '2000311146',
+    orderId: '200031114620150604' + '13579246', //~~(Math.random() * 89999999 + 10000000),
+    currency: 'RMB',
+    amount: '0.01',
+    objectName: '测试签名',
+    paydate: '20160710120406',
+    remark: 'this is a test product',
+    validtime: '0'
+  }));
+});
+
+app.listen(3000, () => {
+  console.log('Pingan test app listening on port 3000!');
+});

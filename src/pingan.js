@@ -19,9 +19,14 @@ export default class Pingan {
 
     if (config.payment) {
       let paymentConfig = {
-        pfx: fs.readFileSync(path.join(__dirname, config.payment.pfx)),
+        key: config.payment.passphrase ? {
+          key: fs.readFileSync(path.join(__dirname, config.payment.pem)),
+          passphrase: config.payment.passphrase
+        } : fs.readFileSync(path.join(__dirname, config.payment.pem)),
         cert: fs.readFileSync(path.join(__dirname, config.payment.cert)),
         masterId: config.payment.masterId,
+        returnURL: config.payment.returnURL,
+        notifyURL: config.payment.notifyURL,
         webServiceHost: config.webServiceHost
       };
       pingan.paymentClient = new PaymentClient(paymentConfig);
@@ -60,6 +65,6 @@ export default class Pingan {
     if (!secureClient.paymentSupported) {
       throw new Error('[Pingan] Missing payment configuration.');
     }
-    return secureClient.paymentForm(params);
+    return secureClient.paymentClient.paymentForm(params);
   }
 }

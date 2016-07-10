@@ -463,7 +463,7 @@ const request = {
       {key: 'Reserve', required: false, type: C, length: 120}
     ]
   },
-  paymentForm: {
+  passwordForm: {
     client: 'regulatory',
     keys: [
       {key: 'orderid', required: true, type: C},
@@ -483,6 +483,21 @@ const request = {
       {key: 'returnurl', required: false, type: C},
       {key: 'notifyUrl', required: false, type: C},
       {key: 'channelType', required: false, type: C}
+    ]
+  },
+  paymentForm: {
+    client: 'payment',
+    endpoint: '/khpayment/khPayment.do',
+    keys: [
+      {key: 'masterId', required: true, type: C, length: 10},
+      // orderId: 商户号+YYYYMMDD+8位流水
+      {key: 'orderId', required: true, type: N, length: 26},
+      {key: 'currency', required: true, type: C, length: 3, default: 'RMB'},
+      {key: 'amount', required: true, type: N, length: 12},
+      {key: 'objectName', required: true, type: C, length: 200},
+      {key: 'paydate', required: true, type: N, length: 14}, // YYYYMMDDHHMMSS
+      {key: 'validtime', required: true, type: N, length: 10},
+      {key: 'remark', required: false, type: C, length: 500}
     ]
   }
 };

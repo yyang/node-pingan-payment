@@ -1,7 +1,8 @@
 import net from 'net';
-import iconv from 'iconv-lite';
 import dateFormat from 'dateformat';
 import ConnectionPool from 'jackpot';
+import {extract, gbkEncode, gbkDecode, padString,
+  joinUrl} from '../utils/helpers';
 import {api} from './api-description';
 
 // Using Symbol definition for private variables;
@@ -24,63 +25,6 @@ let _fullResponseMessage = Symbol();
 let _responseMessage = Symbol();
 let _responseBody = Symbol();
 let _responseBodyString = Symbol();
-
-/**
- * Encodes UTF-8 String to GBK Encoded Buffer
- * @param  {String} string UTF-8 String
- * @return {String}        GBK Encoded Buffer
- */
-function gbkEncode(string) {
-  return iconv.encode(string, 'gbk');
-}
-
-/**
- * Decudes GBK Encoded Buffer to UTF-8 String
- * @param  {Buffer} buffer GBK Encoded Buffer
- * @return {String}        UTF-8 String
- */
-function gbkDecode(buffer) {
-  return iconv.decode(buffer, 'gbk');
-}
-
-/**
- * Return a fixed width string filled with spacer
- * @param  {String} string Original String
- * @param  {Number} width  Expected width
- * @param  {String} spacer Spacing character
- * @return {String}        String with spacer and fixed width
- */
-function padString(string, width, spacer) {
-  spacer = spacer ? spacer.slice(0, 1) : '0';
-  // Translate to String.
-  string = string.toString();
-  if (string.length === width) {
-    return string;
-  }
-  if (string.length > width) {
-    return string.substr(string.length - width);
-  }
-  return Array(width + 1 - string.length).join(spacer) + string;
-}
-
-/**
- * Join all url segments as arguemnts
- * @return {String} joined url
- */
-function joinUrl() {
-  let final = '';
-  for (let i = 0; i < arguments.length; i++) {
-    let segment = arguments[i];
-    if (i !== 0) {
-      segment = segment.replace(/^(?!\/)/, '/');
-    }
-    if (i !== arguments.length) {
-      segment = segment.replace(/\/$/, '');
-    }
-    final += segment;
-  }
-  return final;
-}
 
 class RegulatoryMessage {
   /**
@@ -122,34 +66,7 @@ class RegulatoryMessage {
   composeMessageBody() {
     /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^self$" }] */
     let self = this;
-    let extract = (keyObject, dataObject) => {
-      // Throws Error for missing required param;
-      if (keyObject.required && !dataObject.hasOwnProperty(keyObject.key) &&
-          !keyObject.hasOwnProperty('default')) {
-        throw new Error('[JZB] Missing key ' + keyObject.key +
-                        ' for function ' + self._functionCode);
-      }
-      // Writes default value for non-existing params;
-      if (!dataObject.hasOwnProperty(keyObject.key)) {
-        return keyObject.default || '';
-      }
-      // Validate data
-      let value = dataObject[keyObject.key];
-      if (keyObject.type === Number && !/^\d+$/.test(value)) {
-        throw new Error('[JZB] Incorrect key ' + keyObject.key +
-                        ' format for function ' + self._functionCode);
-      }
-      if (value.toString().length > keyObject.length) {
-        throw new Error('[JZB] Key ' + keyObject.key +
-                        ' overflow for function ' + self._functionCode);
-      }
-      if (keyObject.allowedValues &&
-          keyObject.allowedValues.indexOf(value) === -1) {
-        throw new Error('[JZB] Key ' + keyObject.key +
-                        ' has invalid value for ' + self._functionCode);
-      }
-      return value;
-    };
+    let extractFunc = {part: 'Pingan JZB', name: self._functionCode};
     let keyDictionary = api.request[this[_functionCode]].keys;
     let messageBody = '';
 
@@ -157,13 +74,13 @@ class RegulatoryMessage {
       if (key instanceof Array) {
         for (let listItem of this[_paramsList].list) {
           for (let subKey of key) {
-            messageBody += extract(subKey, listItem) + '&';
+            messageBody += extract(extractFunc, subKey, listItem) + '&';
           }
         }
       } else if (this[_ignoreWebSign] && key.key === 'webSign') {
         continue;
       } else {
-        messageBody += extract(key, this[_paramsList]) + '&';
+        messageBody += extract(extractFunc, key, this[_paramsList]) + '&';
       }
     }
     return messageBody;
@@ -411,7 +328,7 @@ export default class RegulatoryClient {
                'action=' + this[_clientConfig].webEndpoint + '" method="post">';
 
     // Put together keys
-    for (let keyObject of api.paymentForm.keys) {
+    for (let keyObject of api.passwordForm.keys) {
       let value;
       if (keyObject.key === 'orderid') {
         value = clientLogId;

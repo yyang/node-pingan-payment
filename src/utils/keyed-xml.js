@@ -46,7 +46,6 @@ let assembleNode;
 let arrayNode;
 
 assembleNode = (object, docBase, id) => {
-  console.log('Assemble: ' + JSON.stringify(object));
   if (object === null || typeof object !== 'object') {
     throw new Error('[Pingan Payment] Wrong object type');
   }

@@ -28,6 +28,7 @@ function polyfill(targetVersion, object, methods) {
 
 polyfill('<5.10.0', Buffer, {
   from: function() {
+    console.log('polyfill called');
     // Class Method: Buffer.from(array)
     // Original Method: new Buffer(array)
     // Allocates a new Buffer using an array of octets.
