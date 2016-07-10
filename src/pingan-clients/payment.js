@@ -41,7 +41,6 @@ export default class PaymentClient {
     let formData = {
       orig: uriEncode(xml),
       sign: uriEncode(signature),
-      sign2: signature,
       returnurl: this[_clientConfig].returnURL,
       NOTIFYURL: this[_clientConfig].notifyURL
     };
