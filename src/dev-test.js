@@ -10,9 +10,9 @@ let pingan = new Pingan({
     superviseAccountId: '11014892692004'
   },
   payment: {
-    pem: '../certs/2000311146.pem',
+    cert: '../certs/2000311146.pem',
     passphrase: '111111',
-    cert: '../certs/paygate.cer',
+    paygate: '../certs/paygate.pem',
     masterId: '2000311146',
     returnURL: 'http://pingan.stackup.guru/peyment/return',
     notifyURL: 'http://pingan.stackup.guru/peyment/notify'

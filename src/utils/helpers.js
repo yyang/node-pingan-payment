@@ -1,5 +1,8 @@
 import libxml from 'libxmljs';
 import iconv from 'iconv-lite';
+import semver from 'semver';
+
+let currentVersion = semver.clean(process.version);
 
 const extract = (func, keyObj, dataObj) => {
   // Throws Error for missing required param;
@@ -100,6 +103,9 @@ const prepareForm = (formId, endpoint, params) => {
  * @return {String}     encoded String
  */
 const uriEncode = str => {
+  if (semver.satisfies(currentVersion, '<5.10.0')) {
+    return encodeURIComponent(new Buffer(str).toString('base64'));
+  }
   return encodeURIComponent(Buffer.from(str).toString('base64'));
 };
 
@@ -109,6 +115,9 @@ const uriEncode = str => {
  * @return {String}     decoded String
  */
 const uriDecode = str => {
+  if (semver.satisfies(currentVersion, '<5.10.0')) {
+    return new Buffer(decodeURIComponent(str), 'base64').toString();
+  }
   return Buffer.from(decodeURIComponent(str), 'base64').toString();
 };
 

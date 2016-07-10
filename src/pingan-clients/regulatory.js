@@ -47,7 +47,7 @@ class RegulatoryMessage {
     // Validates and stores function code
     this[_functionCode] = functionCode;
     if (!api.request.hasOwnProperty(functionCode)) {
-      throw new Error('[JZB] Pingan Invalid Function Code');
+      throw new Error('[Pingan JZB] Pingan Invalid Function Code');
     }
 
     this[_ignoreWebSign] = ignoreWebSign || false;
@@ -192,7 +192,7 @@ class RegulatoryResponse {
 
     // Escapes if response code other than 000000
     if (this[_responseCode] !== '000000') {
-      throw new Error('[JZB] Invalid Response Code [' + this[_responseCode] +
+      throw new Error('[Pingan JZB] Invalid Response Code [' + this[_responseCode] +
                       ']: ' + this[_responseMessage]);
     }
 
@@ -258,7 +258,7 @@ export default class RegulatoryClient {
   constructor(config) {
     if (!('port' in config && 'server' in config && 'marketId' in config &&
           'webServiceHost' in config)) {
-      throw new Error('[JZB] Cannot initialize retulatory client.');
+      throw new Error('[Pingan JZB] Cannot initialize retulatory client.');
     }
     // Set up Regulatory Client (见证宝)
     this[_pool] = new ConnectionPool(10, () => {
@@ -351,7 +351,7 @@ export default class RegulatoryClient {
         if (keyObject.required &&
             !formParamsList.hasOwnProperty(keyObject.key) &&
             !keyObject.hasOwnProperty('default')) {
-          throw new Error('[JZB] Missing key ' + keyObject.key +
+          throw new Error('[Pingan JZB] Missing key ' + keyObject.key +
                           ' for payment form for ' + functionCode);
         }
         // Writes default value for non-existing default;
@@ -367,16 +367,16 @@ export default class RegulatoryClient {
 
       // Validation
       if (keyObject.type === Number && !/^\d+$/.test(value)) {
-        throw new Error('[JZB] Incorrect key ' + keyObject.key +
+        throw new Error('[Pingan JZB] Incorrect key ' + keyObject.key +
                         ' format for payment form ' + functionCode);
       }
       if (value.toString.length > keyObject.length) {
-        throw new Error('[JZB] Key ' + keyObject.key +
+        throw new Error('[Pingan JZB] Key ' + keyObject.key +
                         ' overflow for function ' + functionCode);
       }
       if (keyObject.allowedValues &&
           keyObject.allowedValues.indexOf(value) === -1) {
-        throw new Error('[JZB] Key ' + keyObject.key +
+        throw new Error('[Pingan JZB] Key ' + keyObject.key +
                         ' has invalid value for function ' + functionCode);
       }
 
