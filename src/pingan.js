@@ -5,6 +5,15 @@ import {RegulatoryClient, PaymentClient} from './pingan-clients';
 import {api} from './pingan-clients/api-description';
 
 let secureData = new WeakMap();
+let loadPem = pemString => {
+  if (!/.pem$/.test(pemString)) {
+    if (/^\//.test(pemString)) {
+      return fs.readFileSync(pemString);
+    }
+    return fs.readFileSync(path.join(__dirname, pemString));
+  }
+  return pemString;
+};
 
 export default class Pingan {
   constructor(config) {
@@ -20,10 +29,10 @@ export default class Pingan {
     if (config.payment) {
       let paymentConfig = {
         cert: config.payment.passphrase ? {
-          key: fs.readFileSync(path.join(__dirname, config.payment.cert)),
+          key: loadPem(config.payment.cert),
           passphrase: config.payment.passphrase
-        } : fs.readFileSync(path.join(__dirname, config.payment.pem)),
-        paygate: fs.readFileSync(path.join(__dirname, config.payment.paygate)),
+        } : loadPem(config.payment.pem),
+        paygate: loadPem(config.payment.paygate),
         masterId: config.payment.masterId,
         returnURL: config.payment.returnURL,
         notifyURL: config.payment.notifyURL,

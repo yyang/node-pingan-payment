@@ -36,8 +36,8 @@ export default class PaymentClient {
 
     // Form output
     let formId = 'pingan-payment-' + params.orderId;
-    let endpoint = joinUrl(this[_clientConfig].webServiceHost,
-                           api.request.paymentForm.endpoint);
+    let endpoint = this[_clientConfig].webServiceHost +
+                   api.request.paymentForm.endpoint;
     let formData = {
       orig: uriEncode(xml),
       sign: uriEncode(signature),
