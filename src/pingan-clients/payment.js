@@ -1,7 +1,7 @@
 import crypto from 'crypto';
+import Symbol from 'symbol';
 import KeyedXML from '../utils/keyed-xml';
-import {validate, prepareForm, uriEncode, uriDecode,
-  joinUrl} from '../utils/helpers';
+import {validate, prepareForm, uriEncode, uriDecode} from '../utils/helpers';
 import {api} from './api-description';
 
 // Using Symbol definition for private variables;

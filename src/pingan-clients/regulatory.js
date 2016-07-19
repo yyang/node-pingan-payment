@@ -1,4 +1,5 @@
 import net from 'net';
+import Symbol from 'symbol';
 import dateFormat from 'dateformat';
 import ConnectionPool from 'jackpot';
 import {extract, gbkEncode, gbkDecode, padString,

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import 'babel-polyfill';
+import 'weakmap-polyfill';
 import {RegulatoryClient, PaymentClient} from './pingan-clients';
 import {api} from './pingan-clients/api-description';
 

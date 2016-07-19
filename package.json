@@ -1,6 +1,6 @@
 {
   "name": "pingan-payment",
-  "version": "0.2.0",
+  "version": "0.2.4",
   "description": "Client for Pingan Payment Service",
   "main": "./lib/pingan.js",
   "scripts": {
@@ -46,7 +46,6 @@
     "babel-plugin-transform-es2015-sticky-regex": "^6.8.0",
     "babel-plugin-transform-es2015-template-literals": "^6.8.0",
     "babel-plugin-transform-es2015-unicode-regex": "^6.8.0",
-    "babel-polyfill": "^6.9.1",
     "eslint": "^2.10.2",
     "eslint-config-google": "^0.5.0",
     "express": "^4.14.0",
@@ -58,6 +57,7 @@
     "jackpot": "0.0.6",
     "libxmljs": "^0.18.0",
     "semver": "^5.1.0",
-    "symbol": "^0.3.0"
+    "symbol": "^0.3.0",
+    "weakmap-polyfill": "^2.0.0"
   }
 }
