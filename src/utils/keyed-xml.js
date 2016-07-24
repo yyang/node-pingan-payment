@@ -1,4 +1,4 @@
-import Symbol from 'symbol';
+import Symbol from 'es6-symbol';
 import libxml from 'libxmljs';
 
 // Using Symbol definition for private variables;

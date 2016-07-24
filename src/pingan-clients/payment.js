@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import Symbol from 'symbol';
+import Symbol from 'es6-symbol';
 import KeyedXML from '../utils/keyed-xml';
 import {validate, prepareForm, uriEncode, uriDecode} from '../utils/helpers';
 import {api} from './api-description';

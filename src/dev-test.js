@@ -10,21 +10,26 @@ let pingan = new Pingan({
     superviseAccountId: '11014892692004'
   },
   payment: {
-    cert: '../certs/kuahang0711.pem',
-    passphrase: '12345678',
+    cert: '../certs/paygate.pem',
+    passphrase: '111111',
     paygate: '../certs/paygate.pem',
-    masterId: '2000724799',
+    masterId: '2000311146',
     returnURL: 'http://pingan.stackup.guru/peyment/return',
     notifyURL: 'http://pingan.stackup.guru/peyment/notify'
   }
+});
+
+pingan.sendMessage('123456', '6000', {}, (error, result) => {
+  console.log(error);
+  console.log(result);
 });
 
 const app = express();
 
 app.get('/', (req, res) => {
   res.send(pingan.preparePaymentForm({
-    masterId: '2000724799',
-    orderId: '200072479920160715' + ~~(Math.random() * 89999999 + 10000000),
+    masterId: '2000311146',
+    orderId: '200031114620160715' + ~~(Math.random() * 89999999 + 10000000),
     currency: 'RMB',
     amount: '0.01',
     objectName: 'Test Order',
