@@ -1,5 +1,6 @@
 import net from 'net';
 import Symbol from 'es6-symbol';
+import BufferShim from 'buffer-shims';
 import dateFormat from 'dateformat';
 import ConnectionPool from 'jackpot';
 import {extract, gbkEncode, gbkDecode, padString,
@@ -113,7 +114,7 @@ class RegulatoryMessage {
   composeNetworkHead() {
     let networkHead = '';
     let messageLength = this.messageBodyBuffer.length +
-                        Buffer.from(this.messageHead).length;
+                        BufferShim.from(this.messageHead).length;
 
     networkHead += 'A001130101';
     networkHead += this[_clientConfig].marketId;
@@ -173,8 +174,8 @@ class RegulatoryMessage {
   }
 
   get buffer() {
-    let networkHeadBuffer = Buffer.from(this.networkHead);
-    let messageHeadBuffer = Buffer.from(this.messageHead);
+    let networkHeadBuffer = BufferShim.from(this.networkHead);
+    let messageHeadBuffer = BufferShim.from(this.messageHead);
 
     const totalLength = networkHeadBuffer.length + messageHeadBuffer.length +
                         this.messageBodyBuffer.length;
@@ -201,7 +202,8 @@ class RegulatoryResponse {
     this[_functionCode] = responseBuffer.toString('utf8', 222, 226);
 
     // Copies last part of buffer to body buffer;
-    let responseBodyBuffer = Buffer.alloc(this[_responseBuffer].length - 344);
+    let responseBodyBufferLength = this[_responseBuffer].length - 344;
+    let responseBodyBuffer = BufferShim.alloc(responseBodyBufferLength);
     responseBuffer.copy(responseBodyBuffer, 0, 344);
     this[_responseBodyString] = gbkDecode(responseBodyBuffer);
 
@@ -306,7 +308,7 @@ export default class RegulatoryClient {
       connection.write(message.buffer);
 
       // Response message
-      let buffer = Buffer.alloc(0);
+      let buffer = BufferShim.alloc(0);
       connection.on('data', data => {
         let totalLength = buffer.length + data.length;
         buffer = Buffer.concat([buffer, data], totalLength);

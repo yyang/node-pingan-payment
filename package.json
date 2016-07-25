@@ -1,6 +1,6 @@
 {
   "name": "pingan-payment",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Client for Pingan Payment Service",
   "main": "./lib/pingan.js",
   "scripts": {
@@ -52,6 +52,7 @@
     "nodemon": "^1.9.2"
   },
   "dependencies": {
+    "buffer-shims": "^1.0.0",
     "dateformat": "^1.0.12",
     "es6-symbol": "^3.1.0",
     "es6-weak-map": "^2.0.1",
