@@ -71,7 +71,8 @@ class RegulatoryMessage {
     let keyDictionary = api.request[this[_functionCode]].keys;
     let messageBody = '';
 
-    for (let key of keyDictionary) {
+    for (let i = 0; i < keyDictionary.length; i++) {
+      let key = keyDictionary[i];
       if (key instanceof Array) {
         for (let listItem of this[_paramsList].list) {
           for (let subKey of key) {
@@ -193,8 +194,8 @@ class RegulatoryResponse {
 
     // Escapes if response code other than 000000
     if (this[_responseCode] !== '000000') {
-      throw new Error('[Pingan JZB] Invalid Response Code [' + this[_responseCode] +
-                      ']: ' + this[_responseMessage]);
+      throw new Error('[Pingan JZB] Invalid Response Code [' +
+                      this[_responseCode] + ']: ' + this[_responseMessage]);
     }
 
     this[_functionCode] = responseBuffer.toString('utf8', 222, 226);
@@ -329,7 +330,8 @@ export default class RegulatoryClient {
                'action=' + this[_clientConfig].webEndpoint + '" method="post">';
 
     // Put together keys
-    for (let keyObject of api.passwordForm.keys) {
+    for (let i = 0; i < api.passwordForm.keys.length; i++) {
+      let keyObject = api.passwordForm.keys[i];
       let value;
       if (keyObject.key === 'orderid') {
         value = clientLogId;
