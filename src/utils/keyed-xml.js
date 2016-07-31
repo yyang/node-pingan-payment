@@ -1,9 +1,4 @@
-import Symbol from 'es6-symbol';
 import libxml from 'libxmljs';
-
-// Using Symbol definition for private variables;
-let _data = Symbol();
-let _doc = Symbol();
 
 /**
  * Parse Pingan Payment XML into JS object, recursively
@@ -21,7 +16,8 @@ const parseNode = node => {
   if (name === 'kColl') {
     let data = {};
     let children = node.childNodes();
-    for (let child of children) {
+    for (let i = 0; i < children.length; i++) {
+      let child = children[i];
       let key = child.attr('id').value();
       if (!key) {
         throw new Error('[Pingan Payment] Missing key for kColl element.');
@@ -34,7 +30,8 @@ const parseNode = node => {
   if (name === 'iColl') {
     let data = [];
     let children = node.childNodes();
-    for (let child of children) {
+    for (let i = 0; i < children.length; i++) {
+      let child = children[i];
       data.push(convert(child));
     }
     return data;
@@ -72,7 +69,8 @@ assembleNode = (object, docBase, id) => {
 
 arrayNode = (array, docBase, id) => {
   let node = new libxml.Element(docBase, 'iColl');
-  for (let item of array) {
+  for (let i = 1; i < array.length; i++) {
+    let item = array[i];
     if (Object.prototype.toString.call(item) === '[object Object]') {
       node.addChild(assembleNode(item, docBase));
     } else if (Object.prototype.toString.call(item) === '[object Array]') {
@@ -95,8 +93,8 @@ export default class KeyedXML {
     if (!data) {
       throw new Error('[Pingan Payment] Empty KeyedXML object.');
     }
-    this[_data] = data;
-    this[_doc] = doc || this._prepareXMLDocument();
+    this._data = data;
+    this._doc = doc || this._prepareXMLDocument();
   }
 
   static fromObject(obj) {
@@ -110,32 +108,32 @@ export default class KeyedXML {
   }
 
   _prepareXMLDocument() {
-    if (!this[_data]) {
+    if (!this._data) {
       throw new Error('[Pingan Payment] Missing data object.');
     }
     let doc = new libxml.Document();
 
-    let docRoot = assembleNode(this[_data], doc, 'input');
+    let docRoot = assembleNode(this._data, doc, 'input');
     doc.root(docRoot);
 
     return doc;
   }
 
   set data(newData) {
-    this[_data] = newData;
-    this[_doc] = this._prepareXMLDocument();
+    this._data = newData;
+    this._doc = this._prepareXMLDocument();
   }
 
   get xml() {
     let clean = string => string.replace(/^<\?.+\?>\n/, '').replace(/\n/g, '');
-    return clean(this[_doc].toString('no_blanks'));
+    return clean(this._doc.toString('no_blanks'));
   }
 
   get json() {
-    return JSON.stringify(this[_data]);
+    return JSON.stringify(this._data);
   }
 
   get object() {
-    return this[_data];
+    return this._data;
   }
 }

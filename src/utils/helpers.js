@@ -35,7 +35,8 @@ const extract = (func, keyObj, dataObj) => {
 
 const validate = (func, validator, dataObj) => {
   let validatedObj = {};
-  for (let keyObj of validator) {
+  for (let i = 0; i < validator.length; i++) {
+    let keyObj = validator[i];
     // Throws Error for missing required param;
     if (keyObj.required && !dataObj.hasOwnProperty(keyObj.key) &&
         !keyObj.hasOwnProperty('default')) {
@@ -65,7 +66,8 @@ const validate = (func, validator, dataObj) => {
                         keyObj.key + ' for function ' + func.name);
       }
       let newArray = [];
-      for (let item of dataObj[keyObj.key]) {
+      for (let j = 0; j < dataObj[keyObj.key].length; j++) {
+        let item = dataObj[keyObj.key][j];
         newArray.push(validate(func, keyObj.validator, item));
       }
       validatedObj[keyObj.key] = newArray;
