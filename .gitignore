@@ -107,7 +107,7 @@ $RECYCLE.BIN/
 ### Package Specific ###
 
 # Ignores lib folder thus we should commit manually
-lib/
+/lib
 
 # Ignore certificates
 /certs/*
