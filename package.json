@@ -22,7 +22,7 @@
     "email": "hello+pingan-payment@iyyang.com"
   },
   "author": "Steve Yang <hello@iyyang.com> (http://yyang.me/)",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-core": "^6.9.0",
