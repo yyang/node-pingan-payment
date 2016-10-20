@@ -6,7 +6,7 @@ import {api} from './pingan-clients/api-description';
 
 let secureData = new WeakMap();
 let loadPem = pemString => {
-  if (!/.pem$/.test(pemString)) {
+  if (/.pem$/.test(pemString)) {
     if (/^\//.test(pemString)) {
       return fs.readFileSync(pemString);
     }
